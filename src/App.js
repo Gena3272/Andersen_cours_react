@@ -1,9 +1,13 @@
+import React from "react";
 import './App.css';
+import Form from "./Form/Form";
 
-function App() {
-  return (
-      <div>Hello World</div>
-  );
+class App extends React.Component {
+  render() {
+    return (
+        <Form/>
+    )
+  }
 }
 
 export default App;
