@@ -1,7 +1,41 @@
-import React from "react";
-import './Form.css'
+import React from 'react';
+import './Form.css';
 
+const ERROR = {
+    firstName: {
+        isEmpty: 'please enter your first name',
+        valid: 'please enter capitalize your first name',
+    },
+    lastName:  {
+        isEmpty: 'please enter your last name',
+        valid: 'please enter capitalize your last name',
+    },
+    phone: {
+        isEmpty: 'please enter your phone',
+        valid: 'please enter valid your phone',
+    },
+    birthday: {
+        isEmpty: 'please enter your birthday',
+    },
+    site: {
+        isEmpty: 'please enter your site',
+        valid: 'please enter valid your site address',
+    },
+    aboutMe: {
+        isEmpty: 'please enter about you',
+        valid: 'Exceeded character limit in field',
+    },
+    stackTech: {
+        isEmpty: 'please enter your technology stack',
+        valid: 'Exceeded character limit in field'
+    },
+    lastProd: {
+        isEmpty: 'please enter description of the latest project',
+        valid: 'Exceeded character limit in field',
+    },
+ }
 class Form extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,10 +54,12 @@ class Form extends React.Component {
             countInStackTech: 0,
             countInLastProd: 0,
         }
+        this.isBlockWithErrors = false;
+        this.isFormValid = true;
     }
 
     handleChange = (event) => {
-        let input = this.state.input;
+        const input = this.state.input;
         input[event.target.name] = event.target.value;
         this.setState({input});
     }
@@ -33,11 +69,13 @@ class Form extends React.Component {
         let errors = {};
 
         if(count > 600) {
-            errors['aboutMe'] = 'Exceeded character limit in field';
+            errors.aboutMe = ERROR.aboutMe.valid;
         }
 
-        this.setState({errors: errors});
-        this.setState({countInAboutMe : count });
+        this.setState({
+            countInAboutMe: count,
+            errors: errors,
+        });
     }
 
     countSymbolForStackTech = (event) => {
@@ -45,11 +83,13 @@ class Form extends React.Component {
         let errors = {};
 
         if(count > 600) {
-            errors['stackTech'] = 'Exceeded character limit in field';
+            errors.stackTech = ERROR.stackTech.valid;
         }
 
-        this.setState({errors: errors});
-        this.setState({countInStackTech : count });
+        this.setState({
+            countInStackTech : count,
+            errors: errors,
+        });
     }
 
     countSymbolForLastProd = (event) => {
@@ -57,95 +97,57 @@ class Form extends React.Component {
         let errors = {};
 
         if(count > 600) {
-            errors['lastProd'] = 'Exceeded character limit in field';
+            errors.lastProd = ERROR.lastProd.valid;
         }
 
-        this.setState({errors: errors});
-        this.setState({countInLastProd : count });
+        this.setState({
+            countInLastProd: count,
+            errors: errors,
+        });
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
 
-        if (this.validate()) {
+        if (this.isAllFieldsValid()) {
             let input = {};
             this.setState({input: input});
         }
     }
 
-    validate = () => {
-        let input = this.state.input;
-        let errors = {};
-        let isValid = true;
-        const pattern = new RegExp('([А-ЯЁA-Z][а-яa-z]*((\\\\s[а-яё])?[а-яё]*)*)$');
+   validateFormField = (errors, name, regExp = '') => {
+       const input = this.state.input;
 
-        if(input['firstName']){
-            if(!pattern.test(input['firstName'])) {
-                isValid = false;
-                errors['firstName'] = 'please enter capitalize your first name';
-            }
-        } else if (!input['firstName']) {
-            isValid = false;
-            errors['firstName'] = 'please enter your first name';
-        }
+       if (!input[name]) {
+           errors[name] = ERROR[name].isEmpty;
+           this.isBlockWithErrors = true;
+           this.isFormValid = false;
+       }
 
-        if(input['lastName']){
-            if(!pattern.test(input['lastName'])) {
-                isValid = false;
-                errors['lastName'] = 'please enter capitalize your last name';
-            }
-        } else if (!input['lastName']) {
-            isValid = false;
-            errors['lastName'] = 'please enter your last name';
-        }
+       if(input[name] && !!regExp && !regExp.test(input[name])) {
+           errors[name] = ERROR[name].valid;
+           this.isBlockWithErrors = true;
+           this.isFormValid = false;
+       }
+   }
 
-        if (!input['birthday']) {
-            isValid = false;
-            errors['birthday'] = 'please enter your birthday';
-        }
+    isAllFieldsValid = () => {
+        const errors = {};
+        const regExpName = new RegExp('([А-ЯЁA-Z][а-яa-z]*((\\\\s[а-яё])?[а-яё]*)*)$');
+        const regExpPhone = new RegExp('^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,13}$');
+        const regExpSite = new RegExp('^((https?|ftp)\\:\\/\\/)?([a-z0-9]{1})((\\.[a-z0-9-])|([a-z0-9-]))*\\.([a-z]{2,6})(\\/?)$');
 
-        if(input['phone']) {
-            const pattern = new RegExp('^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,13}$');
-
-            if(!pattern.test(input['phone'])) {
-                isValid = false;
-                errors['phone'] = 'please enter valid your phone'
-            }
-        } else if (!input['phone']) {
-            isValid = false;
-            errors['phone'] = 'please enter your phone';
-        }
-
-        if (input['site']) {
-            const pattern = new RegExp('^((https?|ftp)\\/\\/)?([a-z0-9]{1})((\\.[a-z0-9-])|([a-z0-9-]))*\\.([a-z]{2,6})(\\/?)$');
-
-            if (!pattern.test(input['site'])) {
-                isValid = false;
-                errors['site'] = 'please enter valid your site address';
-            }
-        } else if (!input['site']) {
-            isValid = false;
-            errors['site'] = 'please enter your site';
-        }
-
-        if(!input['aboutMe']) {
-            isValid = false;
-            errors['aboutMe'] = 'please enter about you';
-        }
-
-        if(!input['stackTech']) {
-            isValid = false;
-            errors['stackTech'] = 'please enter your technology stack';
-        }
-
-        if(!input['lastProd']) {
-            isValid = false;
-            errors['lastProd'] = 'please enter description of the latest project';
-        }
+        this.validateFormField(errors,'firstName', regExpName);
+        this.validateFormField(errors,'lastName', regExpName);
+        this.validateFormField(errors,'birthday');
+        this.validateFormField(errors,'phone', regExpPhone);
+        this.validateFormField(errors,'site', regExpSite);
+        this.validateFormField(errors,'aboutMe');
+        this.validateFormField(errors,'stackTech');
+        this.validateFormField(errors,'lastProd');
 
         this.setState({errors: errors});
-
-        return isValid;
+        return this.isFormValid;
     }
 
     resetForm = () => {
@@ -167,7 +169,9 @@ class Form extends React.Component {
                             value={this.state.input.firstName}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.firstName}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.firstName}</div>
+                        }
                     </div>
                     <div className='container'>
                         <label htmlFor="lastName">Last Name</label>
@@ -178,7 +182,9 @@ class Form extends React.Component {
                             value={this.state.input.lastName}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.lastName}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.lastName}</div>
+                        }
                     </div>
                     <div className='container'>
                         <label htmlFor="birthday">Birthday</label>
@@ -189,7 +195,9 @@ class Form extends React.Component {
                             value={this.state.input.birthday}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.birthday}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.birthday}</div>
+                        }
                     </div>
                     <div className='container'>
                         <label htmlFor="phone">Telephone</label>
@@ -200,7 +208,9 @@ class Form extends React.Component {
                             value={this.state.input.phone}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.phone}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.phone}</div>
+                        }
                     </div>
                     <div className='container'>
                         <label htmlFor='site'>Website</label>
@@ -211,7 +221,9 @@ class Form extends React.Component {
                             value={this.state.input.site}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.site}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.site}</div>
+                        }
                     </div>
                     <div className='container'>
                         <label htmlFor='aboutMe'>About Me</label>
@@ -222,7 +234,9 @@ class Form extends React.Component {
                             onInput={this.countSymbolForAboutMe}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.aboutMe}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.aboutMe}</div>
+                        }
                         <div>{this.state.countInAboutMe} / 600</div>
                     </div>
                     <div className='container'>
@@ -234,7 +248,9 @@ class Form extends React.Component {
                             onInput={this.countSymbolForStackTech}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.stackTech}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.stackTech}</div>
+                        }
                         <div>{this.state.countInStackTech} / 600</div>
                     </div>
                     <div className='container'>
@@ -246,20 +262,22 @@ class Form extends React.Component {
                             onInput={this.countSymbolForLastProd}
                             onChange={this.handleChange}
                         />
-                        <div className='form-error'>{this.state.errors.lastProd}</div>
+                        {this.isBlockWithErrors &&
+                            <div className='form-error'>{this.state.errors.lastProd}</div>
+                        }
                         <div>{this.state.countInLastProd} / 600</div>
                     </div>
                     <div className='container-btn'>
                         <button
-                        type='submit'
-                        className='btn-form'
-                        onClick={this.handleSubmit}>
-                            Save
+                            type='submit'
+                            className='btn-form'
+                            onClick={this.handleSubmit}>
+                                Save
                         </button>
                         <button
-                        className='btn-form btn-cancel'
-                        onClick={this.resetForm}>
-                            Cancel
+                            className='btn-form btn-cancel'
+                            onClick={this.resetForm}>
+                                Cancel
                         </button>
                     </div>
                 </form>
