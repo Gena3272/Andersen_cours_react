@@ -44,7 +44,7 @@ const useValidation = (value, validations) => {
 const useInput = (initialValue, validations) => {
     const [value, setValue] = useState(initialValue);
     const [isDirty, setDirty] = useState(false);
-    const valid = useValidation(value, validations);
+    const validationForm = useValidation(value, validations);
 
     const handleInputChange = (event) => {
         setValue(event.target.value);
@@ -59,7 +59,7 @@ const useInput = (initialValue, validations) => {
         handleInputChange,
         onBlur,
         isDirty,
-        ...valid,
+        ...validationForm,
     }
 }
 
