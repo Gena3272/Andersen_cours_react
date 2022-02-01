@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import Form from './Form/Form';
+import React from 'react';
+import NewForm from './components/NewForm/components/NewForm/NewForm';
 
-class App extends Component {
-  render() {
+const App = () => {
     return (
-        <Form/>
+        <NewForm/>
     )
-  }
 }
 export default App;
