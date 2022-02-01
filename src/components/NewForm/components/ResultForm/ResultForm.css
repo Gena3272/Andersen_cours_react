@@ -1,0 +1,40 @@
+.wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 90%;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-form {
+    margin-top: 50px;
+    text-align: start;
+    list-style: none;
+    padding: 0;
+    width: 350px;
+}
+
+.result-form>li {
+    position: relative;
+    display: block;
+    margin-bottom: .25rem;
+    padding: .325rem .825rem .325rem 1.325rem;
+    color: black;
+    background: #A9A9A9;
+}
+
+.result-form>li:last-child {
+    margin-bottom: 0;
+}
+
+.result-form>li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0.5rem;
+    background: #2F4F4F;
+}

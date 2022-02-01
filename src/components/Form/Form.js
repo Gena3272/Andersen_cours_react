@@ -1,41 +1,8 @@
 import React from 'react';
 import './Form.css';
+import { ERROR, REG_EXP_NAME, REG_EXP_SITE, REG_EXP_PHONE } from '../NewForm/constants/constnants';
 
-const ERROR = {
-    firstName: {
-        isEmpty: 'please enter your first name',
-        valid: 'please enter capitalize your first name',
-    },
-    lastName:  {
-        isEmpty: 'please enter your last name',
-        valid: 'please enter capitalize your last name',
-    },
-    phone: {
-        isEmpty: 'please enter your phone',
-        valid: 'please enter valid your phone',
-    },
-    birthday: {
-        isEmpty: 'please enter your birthday',
-    },
-    site: {
-        isEmpty: 'please enter your site',
-        valid: 'please enter valid your site address',
-    },
-    aboutMe: {
-        isEmpty: 'please enter about you',
-        valid: 'Exceeded character limit in field',
-    },
-    stackTech: {
-        isEmpty: 'please enter your technology stack',
-        valid: 'Exceeded character limit in field'
-    },
-    lastProd: {
-        isEmpty: 'please enter description of the latest project',
-        valid: 'Exceeded character limit in field',
-    },
- }
 class Form extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -102,7 +69,6 @@ class Form extends React.Component {
 
         this.setState({
             countInLastProd: count,
-            errors: errors,
         });
     }
 
@@ -133,15 +99,11 @@ class Form extends React.Component {
 
     isAllFieldsValid = () => {
         const errors = {};
-        const regExpName = new RegExp('([А-ЯЁA-Z][а-яa-z]*((\\\\s[а-яё])?[а-яё]*)*)$');
-        const regExpPhone = new RegExp('^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,13}$');
-        const regExpSite = new RegExp('^((https?|ftp)\\:\\/\\/)?([a-z0-9]{1})((\\.[a-z0-9-])|([a-z0-9-]))*\\.([a-z]{2,6})(\\/?)$');
-
-        this.validateFormField(errors,'firstName', regExpName);
-        this.validateFormField(errors,'lastName', regExpName);
+        this.validateFormField(errors,'firstName', REG_EXP_NAME);
+        this.validateFormField(errors,'lastName', REG_EXP_NAME);
         this.validateFormField(errors,'birthday');
-        this.validateFormField(errors,'phone', regExpPhone);
-        this.validateFormField(errors,'site', regExpSite);
+        this.validateFormField(errors,'phone', REG_EXP_PHONE);
+        this.validateFormField(errors,'site', REG_EXP_SITE);
         this.validateFormField(errors,'aboutMe');
         this.validateFormField(errors,'stackTech');
         this.validateFormField(errors,'lastProd');
