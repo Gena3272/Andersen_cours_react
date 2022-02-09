@@ -1,22 +1,22 @@
-import {SET_LOADED, SET_PIZZAS} from "../constants/constants";
+import {SET_LOADED, SET_PIZZAS} from '../constants/constants';
 
 const initialState = {
   items: [],
   isLoaded: false,
 };
 
-const pizzas = (state = initialState, action) => {
-  switch (action.type) {
+const pizzas = (state = initialState, {type, payload}) => {
+  switch (type) {
     case SET_PIZZAS:
       return {
         ...state,
-        items: action.payload,
+        items: payload,
         isLoaded: true,
       };
     case SET_LOADED:
       return {
         ...state,
-        isLoaded: action.payload,
+        isLoaded: payload,
       };
     default:
       return state;

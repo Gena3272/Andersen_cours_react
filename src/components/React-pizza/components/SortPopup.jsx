@@ -1,8 +1,8 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 
 const SortPopup = memo(function SortPopup({ items, activeSortType, onClickSortType }) {
-  const [visiblePopup, setVisiblePopup] = React.useState(false);
-  const sortRef = React.useRef();
+  const [visiblePopup, setVisiblePopup] = useState(false);
+  const sortRef = useRef();
   const activeLabel = items.find((obj) => obj.type === activeSortType).name;
 
   const toggleVisiblePopup = () => {
@@ -23,7 +23,7 @@ const SortPopup = memo(function SortPopup({ items, activeSortType, onClickSortTy
     setVisiblePopup(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.body.addEventListener('click', handleOutsideClick);
   }, []);
 

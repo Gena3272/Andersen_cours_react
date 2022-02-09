@@ -1,29 +1,26 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { Categories, SortPopup, PizzaBlock, PizzaLoadingBlock } from '../index';
-
 import { setCategory, setSortBy } from '../../../../redux/actions/filters';
 import { fetchPizzas } from '../../../../redux/actions/pizzas';
-import { addPizzaToCart } from '../../../../redux/actions/cart';
 import {CATEGORY_NAMES, SORT_ITEMS} from "../../constants/constants";
 
-function Home() {
+const Home = () => {
   const dispatch = useDispatch();
   const items = useSelector(({ pizzas }) => pizzas.items);
   const cartItems = useSelector(({ cart }) => cart.items);
   const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded);
   const { category, sortBy } = useSelector(({ filters }) => filters);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchPizzas(sortBy, category));
   }, [category, sortBy]);
 
-  const onSelectCategory = React.useCallback((index) => {
+  const onSelectCategory = useCallback((index) => {
     dispatch(setCategory(index));
   }, []);
 
-  const onSelectSortType = React.useCallback((type) => {
+  const onSelectSortType = useCallback((type) => {
     dispatch(setSortBy(type));
   }, []);
 

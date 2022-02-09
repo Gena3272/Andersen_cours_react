@@ -22,16 +22,16 @@ const getTotalSum = (obj, path) => {
   }, 0);
 };
 
-const cart = (state = initialState, action) => {
-  switch (action.type) {
+const cart = (state = initialState, {type, payload}) => {
+  switch (type) {
     case ADD_PIZZA_CART: {
-      const currentPizzaItems = !state.items[action.payload.id]
-        ? [action.payload]
-        : [...state.items[action.payload.id].items, action.payload];
+      const currentPizzaItems = !state.items[payload.id]
+        ? [payload]
+        : [...state.items[payload.id].items, payload];
 
       const newItems = {
         ...state.items,
-        [action.payload.id]: {
+        [payload.id]: {
           items: currentPizzaItems,
           totalPrice: getTotalPrice(currentPizzaItems),
         },
@@ -52,9 +52,9 @@ const cart = (state = initialState, action) => {
       const newItems = {
         ...state.items,
       };
-      const currentTotalPrice = newItems[action.payload].totalPrice;
-      const currentTotalCount = newItems[action.payload].items.length;
-      delete newItems[action.payload];
+      const currentTotalPrice = newItems[payload].totalPrice;
+      const currentTotalCount = newItems[payload].items.length;
+      delete newItems[payload];
       return {
         ...state,
         items: newItems,
@@ -65,12 +65,12 @@ const cart = (state = initialState, action) => {
 
     case PLUS_CART_ITEM: {
       const newObjItems = [
-        ...state.items[action.payload].items,
-        state.items[action.payload].items[0],
+        ...state.items[payload].items,
+        state.items[payload].items[0],
       ];
       const newItems = {
         ...state.items,
-        [action.payload]: {
+        [payload]: {
           items: newObjItems,
           totalPrice: getTotalPrice(newObjItems),
         },
@@ -88,12 +88,12 @@ const cart = (state = initialState, action) => {
     }
 
     case MINUS_CART_ITEM: {
-      const oldItems = state.items[action.payload].items;
+      const oldItems = state.items[payload].items;
       const newObjItems =
-        oldItems.length > 1 ? state.items[action.payload].items.slice(1) : oldItems;
+        oldItems.length > 1 ? state.items[payload].items.slice(1) : oldItems;
       const newItems = {
         ...state.items,
-        [action.payload]: {
+        [payload]: {
           items: newObjItems,
           totalPrice: getTotalPrice(newObjItems),
         },
